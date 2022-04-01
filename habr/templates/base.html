@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if title %}
+        <title>{{ title }} - habr </title>
+    {% else %}
+        <title>habr</title>
+    {% endif %}
+</head>
+<body>
+<div>
+    habr:
+    <a href="{{ url_for('index') }}">Home</a>
+
+</div>
+<hr>
+{% block content %}{% endblock %}
+</body>
+</html>
