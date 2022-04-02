@@ -40,12 +40,6 @@ main {
 	display: flex;
 	align-items: stretch;
 }
-.island {
-	background: #fff;
-	border-radius: 1em;
-	padding: 1em;
-	margin: 1em 0;
-}
 .mainmenu {
 	float: left;
 	width: 200px;
@@ -53,7 +47,47 @@ main {
 .content {
 	margin-left: calc(200px + 2em);
 }
-
+.island {
+	background: #fff;
+	border-radius: 1em;
+	border: 1px solid #fff;
+	margin: 1em 0;
+	padding: 1em;
+}
+.island > h1 {
+    margin: 0;
+}
+.theme {
+    float: right;
+    background: #146c43;
+    color: #fff;
+    border-radius: 1em;
+    padding: 0.25em 2em;
+    margin: 0 0 1em 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.heading {
+    font-size: 2em;
+    margin: 0 0.5em 0.5em 0;
+    font-weight: bold;
+    color: #495057;
+}
+.pubdate {
+    float: right;
+    color: #6610f2;
+    margin: 0 0 1em 1em;
+}
+.author {
+    float: left;
+    color: #dc3545;
+    font-weight: bold;
+    margin: 0 1em 1em 0;
+}
+.description {
+    clear: both;
+    color: #212529;
+}
 
 
 
