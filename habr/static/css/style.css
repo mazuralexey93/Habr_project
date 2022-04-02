@@ -1,0 +1,61 @@
+﻿/*common */
+html {
+	height: 100%;
+}
+body {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	background: #e9ecef;
+}
+
+/*header */
+header {
+	height: 150px;
+	background: #9ec5fe;
+	flex: none;
+}
+header p {
+	color: #fff;
+	font-size: 2em;
+	padding: 50px 0;
+	margin: 0;
+}
+
+/* footer */
+footer {
+	background: #343a40;
+	flex: none;
+}
+footer p {
+	color: #fff;
+	padding: 50px 0;
+	margin: 0;
+}
+
+/* main */
+main {
+	flex: auto;
+	display: flex;
+	align-items: stretch;
+}
+.island {
+	background: #fff;
+	border-radius: 1em;
+	padding: 1em;
+	margin: 1em 0;
+}
+.mainmenu {
+	float: left;
+	width: 200px;
+}
+.content {
+	margin-left: calc(200px + 2em);
+}
+
+
+
+
+
+
