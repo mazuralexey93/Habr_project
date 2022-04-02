@@ -26,18 +26,18 @@ def create_init_user():
 
 @click.command('create-init-post')
 def create_init_post():
-    from habr.models.post import Post
+    from habr.models.post import Post, CategoryChoices
     from wsgi import app
 
     with app.app_context():
         db.session.add_all([
-            Post(category='Design', header='Smthg new!', body='Content', short_description='short_description', user_id=1),
-            Post(category='Web', header='Smthg new!', body='Content', short_description='short_description', user_id=2),
-            Post(category='Mobile', header='Smthg new!', body='Content', short_description='short_description', user_id=3),
-            Post(category='Marketing', header='Smthg new!', body='Content', short_description='short_description', user_id=4),
-            Post(category='Web', header='Smthg new!', body='Content', short_description='short_description', user_id=1),
-            Post(category='Mobile', header='Smthg new!', body='Content', short_description='short_description', user_id=2),
-            Post(category='Marketing', header='Smthg new!', body='Content', short_description='short_description', user_id=3),
-            Post(category='Design', header='Smthg new!', body='Content', short_description='short_description', user_id=4),
-            Post(category='Web', header='Smthg new!', body='Content', short_description='short_description', user_id=1)])
+            Post(category=CategoryChoices.MOBILE, header='Smthg new!', body='Content', description='short_description', user_id=1),
+            Post(category=CategoryChoices.MARKETING, header='Smthg new!', body='Content', description='short_description', user_id=2),
+            Post(category=CategoryChoices.WEB, header='Smthg new!', body='Content', description='short_description', user_id=3),
+            Post(category=CategoryChoices.DESIGN, header='Smthg new!', body='Content', description='short_description', user_id=4),
+            # Post(category='Web', header='Smthg new!', body='Content', description='short_description', user_id=1),
+            # Post(category='Mobile', header='Smthg new!', body='Content', description='short_description', user_id=2),
+            # Post(category='Marketing', header='Smthg new!', body='Content', description='short_description', user_id=3),
+            # Post(category='Design', header='Smthg new!', body='Content', description='short_description', user_id=4),
+            Post(category=CategoryChoices.WEB, header='Smthg new!', body='Content', description='short_description', user_id=1)])
         db.session.commit()

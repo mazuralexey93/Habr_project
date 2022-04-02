@@ -1,11 +1,12 @@
 # Комманды миграций бд
-python3 -m flask db init
-python3 -m flask db upgrade
-python3 -m flask db downgrade
-python3 -m flask db migrate -m "users posts table"
+# При первой инициализации и создании таблиц в БД:
 
-# Вход в оболочку для тестов с бд
-python3 -m flask shell
+python -m flask db init
+python -m flask db migrate -m "Initial migration."
+python -m flask db upgrade
+
+
+
 
 # Пользовательские комманды создания и наполнения бд
 python -m flask init-db
