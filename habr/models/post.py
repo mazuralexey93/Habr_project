@@ -1,18 +1,7 @@
-import enum
+
 from datetime import datetime
 
-from habr.models.database import db
-
-
-class CategoryChoices(enum.Enum):
-    DESIGN = 'Design'
-    WEB = 'Web'
-    MOBILE = 'Mobile'
-    MARKETING = 'Marketing'
-
-    @staticmethod
-    def fetch_categories():
-        return [c.value for c in CategoryChoices]
+from habr.models.database import db, CategoryChoices
 
 
 class Post(db.Model):
