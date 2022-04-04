@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-СЮДА ВЫВОДИТСЯ КОНТЕНТ
-    {{ postlist }}
     {% for post in postlist %}
-            <li>
-                    {{ post.category }}
-            </li>
-        {% endfor %}
+        <div class="island">
+            <div class="theme">{{ post.category }}</div>
+            <div class="heading">{{ post.header }}</div>
+            <div class="pubdate">{{ post.created_at }}</div>
+            <div class="author">{{ post.user_id }}</div>
+            <div class="description">{{ post.description }}</div>
+        </div>
+    {% endfor %}
 {% endblock %}
