@@ -9,6 +9,10 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.Enum(CategoryChoices))
+    # category = db.Column(
+    #     db.Enum(CategoryChoices,
+    #             values_callable=lambda x: [str(cat.value)
+    #                                        for cat in CategoryChoices]))
     header = db.Column(db.String(255))
     body = db.Column(db.Text())
     description = db.Column(db.String(255))

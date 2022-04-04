@@ -8,10 +8,9 @@ migrate = Migrate()
 
 class CategoryChoices(enum.Enum):
     DESIGN = 'design'
-    WEB = 'deb'
+    WEB = 'web'
     MOBILE = 'mobile'
     MARKETING = 'marketing'
 
-    @staticmethod
-    def fetch_categories():
-        return [c.value for c in CategoryChoices]
+    def __str__(self):
+        return self.value
