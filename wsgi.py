@@ -1,6 +1,7 @@
 from habr.app import create_app
-from habr.models.post import Post, CategoryChoices
+from habr.models.post import Post
 from habr.models.user import User
+from habr.models.database import CategoryChoices
 
 from habr.app import db
 
