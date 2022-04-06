@@ -1,9 +1,7 @@
 from flask import Blueprint, render_template
 from werkzeug.exceptions import NotFound
 
-from habr.models.database import db
 from habr.models.post import Post
-from habr.models.user import User
 
 posts = Blueprint(
     name='posts',
@@ -19,11 +17,14 @@ def post_list():
 
 
 @posts.route("/theme/<theme_name>/")
-def theme_filter(theme_name):
-    postlist = Post.query.order_by(Post.created_at.desc()).all()
+def theme_filter(theme_name: str):
+    chosen_category = ''
+    postlist = Post.query.order_by(Post.created_at.desc()).filter(Post.category == theme_name.upper()).all()
 
     for cat in postlist:
-        theme_name = cat.category
+        if theme_name == cat.category:
+            chosen_category = cat.category
 
-    #         raise NotFound("Нет такой категории!")
-    return render_template('index.html', theme_name=theme_name, postlist=postlist)
+        return render_template('index.html', cat=chosen_category, postlist=postlist)
+    else:
+        raise NotFound("Нет такой категории!")

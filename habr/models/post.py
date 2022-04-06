@@ -1,4 +1,3 @@
-
 from datetime import datetime
 
 from habr.models.database import db, CategoryChoices
@@ -9,10 +8,6 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.Enum(CategoryChoices))
-    # category = db.Column(
-    #     db.Enum(CategoryChoices,
-    #             values_callable=lambda x: [str(cat.value)
-    #                                        for cat in CategoryChoices]))
     header = db.Column(db.String(255))
     body = db.Column(db.Text())
     description = db.Column(db.String(255))
@@ -22,5 +17,6 @@ class Post(db.Model):
     # image = db.Column(db.LargeBinary)
     users = db.relationship('User', backref='post', uselist=False)
 
-    def __repr__(self):
-        return f"<Post {self.id}, {self.header}>"
+
+def __repr__(self):
+    return f"<Post {self.id}, {self.header}>"
