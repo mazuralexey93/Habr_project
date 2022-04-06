@@ -16,7 +16,7 @@ def post_list():
     return render_template('index.html', postlist=postlist)
 
 
-@posts.route("/theme/<theme_name>/")
+@posts.route('/theme/<theme_name>/')
 def theme_filter(theme_name: str):
     chosen_category = ''
     postlist = Post.query.order_by(Post.created_at.desc()).filter(Post.category == theme_name.upper()).all()
@@ -27,4 +27,13 @@ def theme_filter(theme_name: str):
 
         return render_template('index.html', cat=chosen_category, postlist=postlist)
     else:
-        raise NotFound("Нет такой категории!")
+        raise NotFound('Нет такой категории!')
+
+
+@posts.route('/<int:pk>')
+def concrete_post(pk: int):
+    selected_post = Post.query.filter_by(id=pk).one_or_none()
+    if not selected_post:
+        raise NotFound(f"Post #{pk} doesn't exist!")
+
+    return render_template('concrete_post.html', post=selected_post)
