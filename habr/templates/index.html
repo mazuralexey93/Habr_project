@@ -3,11 +3,16 @@
 {% block content %}
     {% for post in postlist %}
         <div class="island">
-            <div class="theme">{{ post.category }}</div>
-            <div class="heading">{{ post.header }}</div>
+            <div class="theme">
+                    <a href="/theme/{{ post.category }}">{{ post.category }}</a>
+            </div>
+            <div class="heading">
+                <a href="/post/{{ post.id }}">{{ post.header }}</a>
+            </div>
             <div class="pubdate">{{ post.created_at.ctime() }}</div>
-{#            <div class="pubdate">{{post.created_at.replace(microsecond=0)}}</div>#}
-            <div class="author">{{ post.users.username }}</div>
+            <div class="author">
+                <a href="/author/{{ post.users.id }}">{{ post.users.username }}</a>
+            </div>
             <div class="description">{{ post.description }}</div>
         </div>
     {% endfor %}

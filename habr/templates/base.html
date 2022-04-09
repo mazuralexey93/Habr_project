@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <title>Пробная верстка главной</title>
+    <title>{{ title }}</title>
 </head>
 <body>
     <header>
@@ -16,16 +16,16 @@
     <div class="container">
         <div class="island mainmenu">
                 <nav class="list-group">
-                    <a class="list-group-item active" href="/">Главная</a>
-                    <a class="list-group-item" href="/theme/design/">Дизайн</a>
-                    <a class="list-group-item" href="/theme/web/">Веб-разработка</a>
-                    <a class="list-group-item" href="/theme/mobile/">Мобильная разработка</a>
-                    <a class="list-group-item" href="/theme/marketing/">Маркетинг</a>
+                    <a class="list-group-item{% if not menu %} active{% endif %}" href="/">Главная</a>
+                    <a class="list-group-item{% if menu == 'design' %} active{% endif %}" href="/theme/design/">Дизайн</a>
+                    <a class="list-group-item{% if menu == 'web' %} active{% endif %}" href="/theme/web/">Веб-разработка</a>
+                    <a class="list-group-item{% if menu == 'mobile' %} active{% endif %}" href="/theme/mobile/">Мобильная разработка</a>
+                    <a class="list-group-item{% if menu == 'marketing' %} active{% endif %}" href="/theme/marketing/">Маркетинг</a>
                 </nav>
             </div>
             <div class="content">
                 <div class="island">
-                    <h1>CONTENT HERE!</h1>
+                    <h1>{{ title }}</h1>
                 </div>
                 {% block content %}{% endblock %}
             </div>
