@@ -13,16 +13,8 @@
         </div>
     </header>
     <main>
-    <div class="container">
-        <div class="island mainmenu">
-                <nav class="list-group">
-                    <a class="list-group-item{% if not menu %} active{% endif %}" href="/">Главная</a>
-                    <a class="list-group-item{% if menu == 'design' %} active{% endif %}" href="/theme/design/">Дизайн</a>
-                    <a class="list-group-item{% if menu == 'web' %} active{% endif %}" href="/theme/web/">Веб-разработка</a>
-                    <a class="list-group-item{% if menu == 'mobile' %} active{% endif %}" href="/theme/mobile/">Мобильная разработка</a>
-                    <a class="list-group-item{% if menu == 'marketing' %} active{% endif %}" href="/theme/marketing/">Маркетинг</a>
-                </nav>
-            </div>
+        <div class="container">
+            {% include 'mainmenu.html' %}
             <div class="content">
                 <div class="island">
                     <h1>{{ title }}</h1>

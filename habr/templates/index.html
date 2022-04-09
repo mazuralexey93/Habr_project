@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for post in postlist %}
+    {% if not postlist %}
         <div class="island">
-            <div class="theme">
-                    <a href="/theme/{{ post.category }}">{{ post.category }}</a>
-            </div>
-            <div class="heading">
-                <a href="/post/{{ post.id }}">{{ post.header }}</a>
-            </div>
-            <div class="pubdate">{{ post.created_at.ctime() }}</div>
-            <div class="author">
-                <a href="/author/{{ post.users.id }}">{{ post.users.username }}</a>
-            </div>
-            <div class="description">{{ post.description }}</div>
+            <div class="heading">Здесь пока пусто</div>
         </div>
-    {% endfor %}
+    {% else %}
+        {% for post in postlist %}
+            <div class="island">
+                <div class="theme">
+                    <a href="/theme/{{ post.category }}">{{ post.category }}</a>
+                </div>
+                <div class="heading">
+                    <a href="/post/{{ post.id }}">{{ post.header }}</a>
+                </div>
+                <div class="pubdate">{{ post.created_at.ctime() }}</div>
+                <div class="author">
+                    <a href="/author/{{ post.users.id }}">{{ post.users.username }}</a>
+                </div>
+                <div class="text">{{ post.description }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

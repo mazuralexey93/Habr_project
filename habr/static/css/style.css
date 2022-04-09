@@ -62,7 +62,7 @@ main {
 	margin: 1em 0;
 	padding: 1em;
 }
-.island > h1 {
+.island > :last-child {
     margin: 0;
 }
 .theme {
@@ -92,7 +92,7 @@ main {
     font-weight: bold;
     margin: 0 1em 1em 0;
 }
-.description {
+.text {
     clear: both;
     color: #212529;
 }
