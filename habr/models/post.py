@@ -1,18 +1,6 @@
-import enum
 from datetime import datetime
 
-from habr.models.database import db
-
-
-class CategoryChoices(enum.Enum):
-    DESIGN = 'Design'
-    WEB = 'Web'
-    MOBILE = 'Mobile'
-    MARKETING = 'Marketing'
-
-    @staticmethod
-    def fetch_categories():
-        return [c.value for c in CategoryChoices]
+from habr.models.database import db, CategoryChoices
 
 
 class Post(db.Model):
@@ -26,7 +14,9 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # image = db.Column(db.String(64))
+    # image = db.Column(db.LargeBinary)
+    users = db.relationship('User', backref='post', uselist=False)
 
-    def __repr__(self):
-        return f"<Post {self.id}, {self.header}>"
+
+def __repr__(self):
+    return f"<Post {self.id}, {self.header}>"

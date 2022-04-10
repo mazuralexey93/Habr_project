@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 
 import commands
 from config import Config
@@ -9,14 +9,17 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    @app.route("/")
-    def index():
-        return render_template("index.html")
-
     db.init_app(app)
     migrate.init_app(app, db)
+
+    register_blueprints(app)
     register_commands(app)
     return app
+
+
+def register_blueprints(app):
+    from habr.blueprints.posts import posts
+    app.register_blueprint(posts)
 
 
 def register_commands(app):

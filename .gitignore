@@ -130,3 +130,5 @@ dmypy.json
 
 # OTHER IGNORES
 .idea/
+migrations/
+/db.sqlite
