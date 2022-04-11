@@ -19,7 +19,9 @@ def create_app() -> Flask:
 
 def register_blueprints(app):
     from habr.blueprints.posts import posts
+    from habr.blueprints.auth import auth
     app.register_blueprint(posts)
+    app.register_blueprint(auth)
 
 
 def register_commands(app):
