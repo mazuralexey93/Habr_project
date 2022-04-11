@@ -49,5 +49,5 @@ def author_filter(pk: int):
 @posts.route('/post/<int:pk>')
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
-    title = selected_post.users.username + ' «' + selected_post.header + '»'
+    title = selected_post.user.username + ' «' + selected_post.header + '»'
     return render_template('article.html', post=selected_post, title=title)

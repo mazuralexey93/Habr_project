@@ -16,10 +16,11 @@ def create_init_user():
 
     with app.app_context():
         db.session.add_all([
-            User(username='admin', email='admin@mail.com', is_staff=True, is_admin=True),
-            User(username='moder', email='moder@mail.com', is_staff=True, is_admin=False),
-            User(username='user', email='user@mail.com'),
-            User(username='inactive_user', email='inactive_user@mail.com', is_active=False)])
+            User(username='admin', email='admin@mail.com', password='12345qqq', is_staff=True, is_admin=True),
+            User(username='moder', email='moder@mail.com', password='12345qqq', is_staff=True, is_admin=False),
+            User(username='user', email='user@mail.com', password='12345qqq'),
+            User(username='empty_user', email='empty_user@mail.com', password='12345qqq'),
+            User(username='inactive_user', email='inactive_user@mail.com', password='12345qqq', is_active=False)])
 
         db.session.commit()
 
@@ -46,9 +47,9 @@ def create_init_profile():
 
     with app.app_context():
         db.session.add_all([
-            Profile(firstname='vasya', lastname='ivanov', age=30, password='123123123', description='just user 1', user_id=1),
-            Profile(firstname='sanya', lastname='gomer', age=32, password='123123123', description='just user 2', user_id=2),
-            Profile(firstname='nika', lastname='buzova', age=15, password='123123123', description='just user 3', user_id=3),
-            Profile(firstname='oler', lastname='kislyj', age=23, password='123123123', description='just user 4', user_id=4),
-            Profile(firstname='maria', lastname='petrova', age=40, password='123123123', description='just user 5', user_id=5)])
+            Profile(firstname='vasya', lastname='ivanov', age=30, description='just user 1', user_id=1),
+            Profile(firstname='sanya', lastname='gomer', age=32,  description='just user 2', user_id=2),
+            Profile(firstname='nika', lastname='buzova', age=15,  description='just user 3', user_id=3),
+            Profile(firstname='oler', lastname='kislyj', age=23,  description='just user 4', user_id=4),
+            Profile(firstname='maria', lastname='petrova', age=40, description='just user 5', user_id=5)])
         db.session.commit()

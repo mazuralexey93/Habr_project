@@ -8,6 +8,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
@@ -28,7 +29,6 @@ class Profile(db.Model):
     lastname = db.Column(db.String(255))
     description = db.Column(db.Text())
     age = db.Column(db.Integer)
-    password = db.Column(db.String(255), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     userpic = db.Column(db.LargeBinary)
 
