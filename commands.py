@@ -37,3 +37,18 @@ def create_init_post():
             Post(category=CategoryChoices.DESIGN, header='Smthg new!', body='Content', description='short_description', user_id=4),
             Post(category=CategoryChoices.WEB, header='Smthg new!', body='Content', description='short_description', user_id=1)])
         db.session.commit()
+
+
+@click.command('create-init-profile')
+def create_init_profile():
+    from habr.models.user import Profile
+    from wsgi import app
+
+    with app.app_context():
+        db.session.add_all([
+            Profile(firstname='vasya', lastname='ivanov', age=30, password='123123123', description='just user 1', user_id=1),
+            Profile(firstname='sanya', lastname='gomer', age=32, password='123123123', description='just user 2', user_id=2),
+            Profile(firstname='nika', lastname='buzova', age=15, password='123123123', description='just user 3', user_id=3),
+            Profile(firstname='oler', lastname='kislyj', age=23, password='123123123', description='just user 4', user_id=4),
+            Profile(firstname='maria', lastname='petrova', age=40, password='123123123', description='just user 5', user_id=5)])
+        db.session.commit()

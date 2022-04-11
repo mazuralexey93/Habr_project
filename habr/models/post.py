@@ -13,8 +13,8 @@ class Post(db.Model):
     description = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime(), index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # image = db.Column(db.LargeBinary)
+    user_id = db.Column(db.ForeignKey('users.id'))
+    image = db.Column(db.LargeBinary)
     users = db.relationship('User', backref='post', uselist=False)
 
 

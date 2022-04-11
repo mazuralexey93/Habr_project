@@ -16,3 +16,24 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+
+
+class Profile(db.Model):
+    __tablename__ = "profile"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.ForeignKey('users.id'))
+
+    firstname = db.Column(db.String(255))
+    lastname = db.Column(db.String(255))
+    description = db.Column(db.Text())
+    age = db.Column(db.Integer)
+    password = db.Column(db.String(255), nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    userpic = db.Column(db.LargeBinary)
+
+    user = db.relationship('User', backref='profile', uselist=False)
+
+    def __repr__(self):
+        return f"<Profile {self.firstname} {self.lastname}>"
+
