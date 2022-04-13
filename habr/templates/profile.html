@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Основная информация</h1>
+    <h4> Почта: {{ user.email }}</h4>
+    <h4> Пароль: {{ user.password }}</h4>
+    <h4> Пользователь создан: {{ user.created_at }}</h4>
+    <h4> Активен: {{ user.is_active }}</h4>
+    <h4> Модератор: {{ user.is_staff }}</h4>
+    <h4> Админ: {{ user.is_admin }}</h4>
+    <h2>Дополнительная информация</h2>
+    <h4>Имя: {{ profile.firstname }}</h4>
+    <h4>Фамилия: {{ profile.lastname }}</h4>
+    <h4>О себе: {{ profile.description }}</h4>
+    <h4>Возраст: {{ profile.age }}</h4>
+    <h4>Аватар: {{ profile.userpic }}</h4>
+    <div class="heading">
+        <a href="/profile/posts/{{ user.id }}"> Все статьи пользователя</a>
+    </div>
+{% endblock %}
