@@ -1,9 +1,9 @@
 from datetime import datetime
-
+from flask_login import UserMixin
 from habr.models.database import db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)

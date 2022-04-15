@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from flask_login import login_required
 from werkzeug.exceptions import NotFound
 
 from habr.models.post import Post
@@ -12,20 +13,23 @@ profile = Blueprint(
     url_prefix='/profile')
 
 
-@profile.route("/<int:pk>/")
-def user_profile_info(pk: int):
-    user_profile = User.query.filter_by(id=pk).first_or_404()
-    profile_info = Profile.query.filter_by(user_id=pk).one_or_none()
+@login_required
+@profile.route("/")
+def user_profile_info():
+
+    user_profile = User.query.get(int(1))  # после логина тут будет вставляться id пользователя
+    profile_info = Profile.query.filter_by(user_id=1).one_or_none()  # и тут
     title = f'Личный кабинет {user_profile.username}'
     if not user_profile:
-        raise NotFound(f"User #{pk} doesn't exist!")
+        raise NotFound(f"User #{1} doesn't exist!")  # и тут
     return render_template('profile.html', title=title, user=user_profile, profile=profile_info)
 
 
-@profile.route("/posts/<int:pk>/")
-def show_user_posts(pk: int):
-    user_profile = User.query.filter_by(id=pk).first_or_404()
-    postlist = Post.query.filter_by(user_id=pk).order_by(
+@login_required
+@profile.route("/posts/")
+def show_user_posts():
+    user_profile = User.query.filter_by(id=1).first_or_404()  # и тут
+    postlist = Post.query.filter_by(user_id=1).order_by(   # и тут
                 Post.created_at.desc()).all()
 
     title = f'Все статьи {user_profile.username}'

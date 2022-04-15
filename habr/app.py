@@ -1,21 +1,32 @@
 from flask import Flask
-
+from flask_login import LoginManager
+from .instruments import login_manager
 import commands
 from config import Config
 
 from habr.models.database import db, migrate
-
+from habr.models.user import User
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    db.init_app(app)
-    migrate.init_app(app, db)
-
+    register_instruments(app)
     register_blueprints(app)
     register_commands(app)
     return app
+
+
+def register_instruments(app):
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'login'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
 
 def register_blueprints(app):
