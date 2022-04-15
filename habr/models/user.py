@@ -36,4 +36,3 @@ class Profile(db.Model):
 
     def __repr__(self):
         return f"<Profile {self.firstname} {self.lastname}>"
-
