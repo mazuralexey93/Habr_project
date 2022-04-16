@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import logout_user, login_user, login_required, current_user
 from werkzeug.security import check_password_hash
 from habr.models.user import User
+from habr.forms.auth import UserLoginForm
 
 
 auth = Blueprint(
@@ -11,19 +12,22 @@ auth = Blueprint(
     static_folder='/static')
 
 
-@auth.route('/login', methods=['POST','GET'])
-def login_post():
-    email = request.form.get('email')
-    password = request.form.get('password')
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('user.profile', pk=current_user.id))
 
-    user = User.query.filter_by(email=email).first()
+    form = UserLoginForm(request.form)
 
-    if not user or not check_password_hash(user.password, password):
-        flash('Check your login details')
-        return redirect(url_for('.login'))
+    if request.method == 'POST' and form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).one_or_none()
+        if (user is None) or (not check_password_hash(user.password, form.password.data)):
+            return render_template("login.html", form=form, error="invalid username or password")
 
-    login_user(user)
-    return redirect(url_for('user.profile', pk=user.id))
+        login_user(user)
+        return redirect(url_for('user.profile', pk=current_user.id))
+
+    return render_template("login.html", form=form)
 
 
 @auth.route('/logout')
