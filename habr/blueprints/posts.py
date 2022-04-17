@@ -22,7 +22,7 @@ posts = Blueprint(
 def post_list():
     postlist = Post.query.order_by(Post.created_at.desc()).all()
     return render_template('index.html', menu='main', title="Главная страница",
-                           postlist=postlist)
+                           pageheader="Главная страница", postlist=postlist)
 
 
 @posts.route("/theme/<theme_name>/")
@@ -33,6 +33,7 @@ def theme_filter(theme_name: str):
         Post.created_at.desc()).all()
     print(postlist)
     return render_template('index.html', menu=theme_name,
+                           pageheader=themes_dic[theme_name],
                            title=themes_dic[theme_name], postlist=postlist)
 
 
@@ -43,7 +44,8 @@ def author_filter(pk: int):
         Post.created_at.desc()).all()
     title = f'Все статьи автора {author.username}'
     print(postlist)
-    return render_template('index.html', title=title, postlist=postlist)
+    return render_template('index.html', title=title, pageheader=title,
+                           postlist=postlist)
 
 
 @posts.route('/post/<int:pk>')
