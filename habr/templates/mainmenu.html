@@ -6,6 +6,9 @@
         <a class="list-group-item{% if menu == 'mobile' %} active{% endif %}" href="/theme/mobile/">Мобильная разработка</a>
         <a class="list-group-item{% if menu == 'marketing' %} active{% endif %}" href="/theme/marketing/">Маркетинг</a>
         <hr>
+        {% if current_user.is_anonymous %}
         <a class="list-group-item{% if menu == 'account' %} active{% endif %}" href="/profile/">Личный кабинет</a>
+{#        <a hidden="true" class="list-group-item{% if menu == 'account' %} active{% endif %}" href="/profile/">Личный кабинет</a>#}
+    {% endif %}
     </nav>
 </div>
