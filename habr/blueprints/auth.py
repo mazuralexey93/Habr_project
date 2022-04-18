@@ -14,7 +14,6 @@ auth = Blueprint(
 @auth.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        # return redirect(url_for('user.profile', pk=current_user.id))
         return redirect(url_for('profile.user_profile_info', pk=current_user.id))
 
     form = UserLoginForm(request.form)
@@ -24,7 +23,6 @@ def login():
         print(check_password_hash(user.password, form.password.data))
         if (user is None) or (not check_password_hash(user.password, form.password.data)):
             return render_template("login.html", form=form, error="invalid username or password")
-
         login_user(user)
         return redirect(url_for('profile.user_profile_info', pk=current_user.id))
 
