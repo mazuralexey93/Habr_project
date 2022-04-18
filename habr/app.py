@@ -1,8 +1,12 @@
 from flask import Flask
-from .instruments import login_manager
 
 import commands
+from habr.instruments import login_manager
+
 from config import Config
+from habr.blueprints.posts import posts
+from habr.blueprints.profile import profile
+from habr.blueprints.auth import auth
 
 from habr.models.database import db, migrate
 from habr.models.user import User
@@ -22,7 +26,7 @@ def register_instruments(app):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # login_manager.login_view = 'login' # путь к blueprint login
+    login_manager.login_view = 'auth.login'  # путь к blueprint login
     login_manager.init_app(app)
 
     @login_manager.user_loader
@@ -31,10 +35,9 @@ def register_instruments(app):
 
 
 def register_blueprints(app):
-    from habr.blueprints.posts import posts
-    from habr.blueprints.profile import profile
     app.register_blueprint(posts)
     app.register_blueprint(profile)
+    app.register_blueprint(auth)
 
 
 def register_commands(app):
