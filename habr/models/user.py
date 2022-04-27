@@ -1,9 +1,11 @@
 from datetime import datetime
+from flask_login import UserMixin
+from werkzeug.security import check_password_hash
 
 from habr.models.database import db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +16,9 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     is_staff = db.Column(db.Boolean, nullable=False, default=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
+
+    def check_password(self, password: str) -> bool:
+        return check_password_hash(self.password, password)
 
     def __repr__(self):
         return f"<User {self.username}>"
@@ -36,4 +41,3 @@ class Profile(db.Model):
 
     def __repr__(self):
         return f"<Profile {self.firstname} {self.lastname}>"
-

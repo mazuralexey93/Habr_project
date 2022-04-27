@@ -5,5 +5,17 @@
         <a class="list-group-item{% if menu == 'web' %} active{% endif %}" href="/theme/web/">Веб-разработка</a>
         <a class="list-group-item{% if menu == 'mobile' %} active{% endif %}" href="/theme/mobile/">Мобильная разработка</a>
         <a class="list-group-item{% if menu == 'marketing' %} active{% endif %}" href="/theme/marketing/">Маркетинг</a>
+        <hr>
+
+        {% if current_user.is_anonymous %}
+            <a class="list-group-item{% if menu == 'login' %} active{% endif %}" href="/login/"> Login </a>
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+            <a class="list-group-item{% if menu == 'logout' %} active{% endif %}" href="/logout/"> Logout </a>
+            <a hidden="true" class="list-group-item{% if menu == 'login' %} active{% endif %}" href="/login/"> Login </a>
+            <a class="list-group-item{% if menu == 'account' %} active{% endif %}"
+               href="/profile/">Личный кабинет: {{current_user.username}}</a>
+        {% endif %}
     </nav>
 </div>
