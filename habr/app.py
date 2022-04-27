@@ -26,5 +26,6 @@ def register_commands(app):
     app.cli.add_command(commands.init_db)
     app.cli.add_command(commands.create_init_user)
     app.cli.add_command(commands.create_init_post)
+    app.cli.add_command(commands.create_init_profile)
 
 

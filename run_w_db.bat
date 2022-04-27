@@ -4,4 +4,5 @@ flask db upgrade
 flask init-db
 flask create-init-user
 flask create-init-post
+flask create-init-profile
 flask run
