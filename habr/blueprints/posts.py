@@ -33,8 +33,8 @@ def theme_filter(theme_name: str):
         Post.created_at.desc()).all()
 
     return render_template('index.html', menu=theme_name,
+                           pageheader=themes_dic[theme_name],
                            title=themes_dic[theme_name], postlist=postlist)
-
 
 @posts.route("/author/<int:pk>/")
 def author_filter(pk: int):
