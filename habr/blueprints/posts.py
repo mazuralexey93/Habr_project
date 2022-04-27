@@ -31,7 +31,6 @@ def theme_filter(theme_name: str):
         raise NotFound('Нет такой категории!')
     postlist = Post.query.filter(Post.category == theme_name.upper()).order_by(
         Post.created_at.desc()).all()
-    print(postlist)
     return render_template('index.html', menu=theme_name,
                            pageheader=themes_dic[theme_name],
                            title=themes_dic[theme_name], postlist=postlist)
@@ -43,7 +42,7 @@ def author_filter(pk: int):
     postlist = Post.query.filter_by(user_id=pk).order_by(
         Post.created_at.desc()).all()
     title = f'Все статьи автора {author.username}'
-    return render_template('index.html', title=title, ostlist=postlist)
+    return render_template('index.html', title=title, postlist=postlist)
 
 
 @posts.route('/post/<int:pk>')
