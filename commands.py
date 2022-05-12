@@ -2,6 +2,7 @@ import click
 from habr.models.database import db
 
 
+
 @click.command('init-db')
 def init_db():
     from wsgi import app
@@ -27,16 +28,16 @@ def create_init_user():
 
 @click.command('create-init-post')
 def create_init_post():
-    from habr.models.post import Post, CategoryChoices
+    from habr.models.post import Post, CategoryChoices, PostStatus
     from wsgi import app
 
     with app.app_context():
         db.session.add_all([
-            Post(category=CategoryChoices.MOBILE, header='Smthg new!', body='Content', description='short_description', user_id=1),
-            Post(category=CategoryChoices.MARKETING, header='Smthg new!', body='Content', description='short_description', user_id=2),
-            Post(category=CategoryChoices.WEB, header='Smthg new!', body='Content', description='short_description', user_id=3),
-            Post(category=CategoryChoices.DESIGN, header='Smthg new!', body='Content', description='short_description', user_id=4),
-            Post(category=CategoryChoices.WEB, header='Smthg new!', body='Content', description='short_description', user_id=1)])
+            Post(category=CategoryChoices.MOBILE, status=PostStatus.NOT_PUBLISHED, header='Smthg new!', body='Content', description='short_description', user_id=1),
+            Post(category=CategoryChoices.MARKETING, status=PostStatus.PUBLISHED, header='Smthg new!', body='Content', description='short_description', user_id=2),
+            Post(category=CategoryChoices.WEB, status=PostStatus.MODERING,header='Smthg new!', body='Content', description='short_description', user_id=3),
+            Post(category=CategoryChoices.DESIGN, status=PostStatus.NEED_REFACTOR, header='Smthg new!', body='Content', description='short_description', user_id=4),
+            Post(category=CategoryChoices.WEB, status=PostStatus.ARCHIEVED,header='Smthg new!', body='Content', description='short_description', user_id=1)])
         db.session.commit()
 
 
