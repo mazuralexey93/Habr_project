@@ -60,20 +60,21 @@ def concrete_post(pk: int):
 @posts.route('/create/', methods=['GET', 'POST'])
 def create_article():
     form = CreateArticleForm(request.form)
+    form.category.choices = [x for x in CategoryChoices.__members__]
+
     if request.method == "POST" and form.validate_on_submit():
-        post = Post(category=CategoryChoices.MOBILE, header=form.title.data.strip(), body=form.text.data, description=form.description.data)
-        if current_user.username:
+        post = Post(category=form.category.data, header=form.title.data.strip(), body=form.text.data, description=form.description.data)
+        if current_user:
             post.user_id = current_user.id
         else:
             user = User(user_id=current_user.id)
             db.session.add(user)
             db.session.flush()
             post.user_id = user.id
-
         db.session.add(post)
         db.session.commit()
 
-        return redirect(url_for('article_details', post_id=user.id))
+        return redirect(url_for('posts.post_list'))
 
     return render_template('article_create.html', form=form)
 
