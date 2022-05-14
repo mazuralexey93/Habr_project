@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import current_user, login_required
 from werkzeug.exceptions import NotFound
 
-from habr.models.post import Post
+from habr.models.post import Post, CategoryChoices
 from habr.models.user import User
+from habr.models.database import db
+from habr.forms.post import CreateArticleForm
 
 themes_dic = {
     'design': 'Дизайн',
@@ -50,3 +53,33 @@ def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
     title = selected_post.user.username + ' «' + selected_post.header + '»'
     return render_template('article.html', post=selected_post, title=title)
+
+
+@login_required
+@posts.route('/create/', methods=['GET', 'POST'])
+def create_article():
+    form = CreateArticleForm(request.form)
+    form.category.choices = [x for x in CategoryChoices.__members__]
+
+    if request.method == "POST" and form.validate_on_submit():
+        post = Post(category=form.category.data, header=form.title.data.strip(), body=form.text.data, description=form.description.data)
+        if current_user:
+            post.user_id = current_user.id
+        else:
+            user = User(user_id=current_user.id)
+            db.session.add(user)
+            db.session.flush()
+            post.user_id = user.id
+        db.session.add(post)
+        db.session.commit()
+
+        return redirect(url_for('posts.post_list'))
+
+    return render_template('article_create.html', form=form)
+
+
+@posts.route('/post/<int:pk>/delete')
+def concrete_post_delete(pk: int):
+    selected_post = Post.query.filter_by(id=pk).first_or_404()
+    title = selected_post.user.username + ' «' + selected_post.header + '»'
+    return render_template('article_update.html', post=selected_post, title=title)
