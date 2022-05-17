@@ -56,7 +56,7 @@ def concrete_post(pk: int):
 
 
 @login_required
-@posts.route('/create/', methods=['GET', 'POST'])
+@posts.route('/post/create/', methods=['GET', 'POST'])
 def create_article():
     form = CreateArticleForm(request.form)
     form.category.choices = [x for x in CategoryChoices.__members__]

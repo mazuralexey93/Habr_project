@@ -8,7 +8,7 @@
    <h1>{{ post.title }}</h1>
    <h2>{{ post.user.user.firstname }} {{ post.user.user.lastname }}</h2>
    <div>
-     <p>{{ post.text }}</p>
+     <p>{{ post.text | safe}}</p>
      <div>Published {{ post.created_at }}</div>
    </div>
  {% endblock %}

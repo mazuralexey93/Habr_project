@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+ {{ ckeditor.load() }}
 
  {% block title %}
    Новая статья
@@ -14,6 +15,7 @@
      {% endif %}
      <form method="post">
        {{ form.csrf_token }}
+{#      {{ ckeditor.create(value='blah...blah...') }}#}
 
        {% for field_name in ['title', 'category', 'text', 'description'] %}
        {% set field = form[field_name] %}
@@ -24,5 +26,6 @@
        {% endfor %}
        {{ form.submit(class="btn btn-primary my-3") }}
      </form>
+
    </div>
  {% endblock %}
