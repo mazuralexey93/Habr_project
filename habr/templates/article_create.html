@@ -17,7 +17,8 @@
        {{ form.csrf_token }}
 {#      {{ ckeditor.create(value='blah...blah...') }}#}
 
-       {% for field_name in ['title', 'category', 'text', 'description'] %}
+       {% for field_name in ['title', 'category', 'status', 'text', 'description'] %}
+
        {% set field = form[field_name] %}
          <div class="my-3">
            {{ field.label(class="form-label") }}
