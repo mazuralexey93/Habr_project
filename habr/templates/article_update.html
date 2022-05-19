@@ -1,17 +1,30 @@
 {% extends 'base.html' %}
+{{ ckeditor.load() }}
+
+
+{% block title %}
+    Редактировать статью
+{% endblock %}
 
 {% block content %}
-    <div class="island">
-        <div class="theme">
-            <a href="/theme/{{ post.category }}">{{ post.category }}</a>
-        </div>
-        <div class="heading">
-            <a href="/post/{{ post.id }}/update"  class="btn btn-success">{{ post.header }}Редактировать</a>
-        </div>
-        <div class="pubdate">{{ post.created_at.ctime() }}</div>
-        <div class="author">
-            <a href="/author/{{ post.user.id }}">{{ post.user.username }}</a>
-        </div>
-        <div class="text">{{ post.body }}</div>
-    </div>
-{% endblock %}
+   <h1>Редактирование статьи</h1>
+   <div>
+     {% if error %}
+       <div class="alert alert-danger" role="alert">
+         {{ error }}
+       </div>
+     {% endif %}
+     <form method="post">
+       {{ form.csrf_token }}
+       {% for field_name in ['title', 'category', 'text', 'description'] %}
+       {% set field = form[field_name] %}
+         <div class="my-3">
+           {{ field.label(class="form-label") }}
+           {{ field(class="form-control") }}
+         </div>
+       {% endfor %}
+       {{ form.submit(class="btn btn-primary my-3") }}
+     </form>
+
+   </div>
+ {% endblock %}

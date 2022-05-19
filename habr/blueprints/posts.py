@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from werkzeug.exceptions import NotFound
 
@@ -62,7 +62,7 @@ def create_article():
     form.category.choices = [x for x in CategoryChoices.__members__]
 
     if request.method == "POST" and form.validate_on_submit():
-        post = Post(category=form.category.data, header=form.title.data.strip(), body=form.text.data, description=form.description.data)
+        post = Post(category=form.category.data, header=form.title.data, body=form.text.data, description=form.description.data)
         if current_user:
             post.user_id = current_user.id
         else:
@@ -75,11 +75,40 @@ def create_article():
 
         return redirect(url_for('posts.post_list'))
 
-    return render_template('article_create.html', form=form)
+    return render_template('index.html', form=form)
+
+@login_required
+@posts.route('/post/update/<int:pk>/', methods=['GET', 'POST'])
+def update_article(pk):
+    form = CreateArticleForm(request.form)
+    form.category.choices = [x for x in CategoryChoices.__members__]
+    post = Post.query.get_or_404(pk)
+
+    if request.method == 'GET':
+        if current_user != post.user:
+            flash("Can't update another user's post!")
+            return redirect(url_for('posts.concrete_post', pk=pk))
+
+    if request.method == "POST" and form.validate_on_submit():
+        post.header = form.title.data
+        post.category = form.category.data
+        post.description = form.description.data
+        post.body = form.text.data
+        post.user_id = current_user.id
+        db.session.add(post)
+        db.session.commit()
+        flash('Post has been updated!')
+        return redirect(url_for('posts.concrete_post', pk=pk))
+
+    form.title.data = post.header
+    form.category.data = post.category
+    form.description.data = post.description
+    form.text.data = post.body
+    return render_template('article_update.html', form=form)
 
 
-@posts.route('/post/<int:pk>/delete')
-def concrete_post_delete(pk: int):
-    selected_post = Post.query.filter_by(id=pk).first_or_404()
-    title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article_update.html', post=selected_post, title=title)
+@posts.route('/post/delete/<int:pk>')
+def delete_article(pk: int):
+    post = Post.query.get_or_404(pk)
+    # в профиле пользователя добавить ссылки на разные статусы статей (опубликованы, на модерации, требуют редакт, в архиве
+    return render_template('archieved.html')
