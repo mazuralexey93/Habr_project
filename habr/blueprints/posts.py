@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user, login_required
 from werkzeug.exceptions import NotFound
 
-from habr.models.post import Post, CategoryChoices
+from habr.models.post import Post, CategoryChoices, Comment
 from habr.models.user import User
 from habr.models.database import db
 from habr.forms.post import CreateArticleForm
@@ -52,8 +52,9 @@ def author_filter(pk: int):
 @posts.route('/post/<int:pk>')
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
+    comment = Comment.query.filter_by(id=pk).order_by(db.desc(Comment.date_posted)).all()
     title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article.html', post=selected_post, title=title)
+    return render_template('article.html', post=selected_post, title=title, comment=comment)
 
 
 @login_required

@@ -10,3 +10,8 @@ class CreateArticleForm(FlaskForm):
     category = SelectField('Категория', [validators.DataRequired()])
     description = TextAreaField('Описание', [validators.DataRequired()])
     submit = SubmitField('Добавить')
+
+
+class AddCommentForm(FlaskForm):
+    body = StringField('Ваш комментарий', [validators.DataRequired()])
+    submit = SubmitField('Добавить')
