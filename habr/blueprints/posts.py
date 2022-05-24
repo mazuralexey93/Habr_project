@@ -60,7 +60,7 @@ def concrete_post(pk: int):
 def create_article():
     form = CreateArticleForm(request.form)
     form.category.choices = [x for x in CategoryChoices.__members__]
-    form.status.choices = [y for y in PostStatus.__members__]
+    form.status.choices = [y for y in PostStatus.__members__ if y != 'PUBLISHED' and y != 'NEED_REFACTOR' and y != 'ARCHIEVED']
 
     if request.method == "POST" and form.validate_on_submit():
         post = Post(category=form.category.data, header=form.title.data, body=form.text.data, description=form.description.data, status=form.status.data)
@@ -84,7 +84,7 @@ def create_article():
 def update_article(pk):
     form = CreateArticleForm(request.form)
     form.category.choices = [x for x in CategoryChoices.__members__]
-    form.status.choices = [y for y in PostStatus.__members__]
+    form.status.choices = [y for y in PostStatus.__members__ if y != 'PUBLISHED' and y != 'NEED_REFACTOR']
     post = Post.query.get_or_404(pk)
 
     if request.method == 'GET':
@@ -120,4 +120,5 @@ def delete_article(pk: int):
             return redirect(url_for('posts.concrete_post', pk=pk))
 
     post.status = PostStatus.ARCHIEVED
-    return render_template('archieved.html')
+
+    return render_template('index.html')
