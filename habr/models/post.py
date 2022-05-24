@@ -51,4 +51,4 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), nullable=False)
 
 def __repr__(self):
-    return f"<Comment {self.body}, {self.date_posted.strftime('%d.%m.%Y-%.H%.M')}, {self.post.id}>"
+    return f"<Comment {self.body}, {self.date_posted.strftime('%d.%m.%Y-%.H%.M')}, {self.post_id}>"

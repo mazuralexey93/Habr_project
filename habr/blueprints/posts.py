@@ -5,7 +5,7 @@ from werkzeug.exceptions import NotFound
 from habr.models.post import Post, CategoryChoices, Comment
 from habr.models.user import User
 from habr.models.database import db
-from habr.forms.post import CreateArticleForm
+from habr.forms.post import AddCommentForm, CreateArticleForm
 
 themes_dic = {
     'design': 'Дизайн',
@@ -52,9 +52,18 @@ def author_filter(pk: int):
 @posts.route('/post/<int:pk>')
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
-    comment = Comment.query.filter_by(id=pk).order_by(db.desc(Comment.date_posted)).all()
+    comment = Comment.query.filter_by(post_id=pk).order_by(db.desc(Comment.date_posted)).all()
+    selected_post.views += 1
+    db.session.commit()
+    form = AddCommentForm()
+    if request.method == 'POST':
+        username = current_user.username
+        comment = Comment(username=username, body=form.body.data, post_id=pk)
+        db.session.add(comment)
+        db.session.commit
+        return redirect(url_for('post.post', post_id=pk))
     title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article.html', post=selected_post, title=title, comment=comment)
+    return render_template('article.html', post=selected_post, title=title, comment=comment, form=form,post_id=pk)
 
 
 @login_required

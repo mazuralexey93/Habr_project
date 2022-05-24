@@ -15,9 +15,30 @@
         <div class="text">{{ post.body }}</div>
 
         <div class="comment">
+            <div class="content_comment">
+            <form method="POST" action="{{ url_for('posts.post_list', post_id=post_id) }}">
+                {{ form.hidden_tag()}}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Добавьте свой комментарий</legend>
+
+
+                </fieldset>
+
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </form>
+
+
+            </div>
 
             <div class="body_comment">
-                {{comment.body}} {{comment.id}}
+                {% for i in comment %}
+                <div>
+                    {{i.username}}
+                </div>
+                {{i.body}} {{i.id}}
+                {% endfor %}
             </div>
             <div class="stat_comment">
                 <div class="stat_left">&#128065 {{post.views}}</div>
