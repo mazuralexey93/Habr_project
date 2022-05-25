@@ -52,6 +52,9 @@ main {
 	float: left;
 	width: 200px;
 }
+.list-group {
+    margin-bottom: 1em;
+}
 .content {
 	margin-left: calc(200px + 2em);
 }
