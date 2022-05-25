@@ -22,10 +22,23 @@
             <div class="content_comment">
             <form method="POST" action="{{ url_for('posts.post_list', post_id=post_id) }}">
                 {{ form.hidden_tag()}}
+                {{ form.csrf_token }}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Добавьте свой комментарий</legend>
-
-
+                    <div class="form-group">
+                        {{ form.body.label(class="form-control-label") }}
+                        <p></p>
+                        {% if form.body.errors %}
+                            {{ form.body(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.body.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.body(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
                 </fieldset>
 
                 <div class="form-group">
@@ -35,16 +48,18 @@
 
 
             </div>
-
+            {% for i in comment %}
             <div class="body_comment">
-                {% for i in comment %}
+                
                 <div>
                     <a href="{{ url_for('posts.post_list', username=i.username) }}">{{ i.username }}</a>
                 </div>
                 {{i.body}} {{i.id}}
-                {% endfor %}
+
+                <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Обновить комментарий</p></a>
+                
             </div>
-            
+            {% endfor %}
 
         </div>
     </div>

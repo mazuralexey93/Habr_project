@@ -15,3 +15,7 @@ class CreateArticleForm(FlaskForm):
 class AddCommentForm(FlaskForm):
     body = StringField('Ваш комментарий', [validators.DataRequired()])
     submit = SubmitField('Добавить')
+
+class UpdateCommentForm(FlaskForm):
+    body = StringField('Ваш комментарий', [validators.DataRequired()])
+    submit = SubmitField('Обновить комментарий')
