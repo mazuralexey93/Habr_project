@@ -92,12 +92,24 @@ main {
     font-weight: bold;
     margin: 0 1em 1em 0;
 }
+.lock {
+    overflow: hidden;
+}
 .text {
-    clear: both;
     color: #212529;
 }
 
-
+@media screen and (max-width: 767px) {
+    .theme, .pubdate {
+        float: none;
+        margin-left: 0;
+        display: inline-block;
+    }
+    .heading, .author {
+        float: none;
+        margin-right: 0;
+    }
+}
 
 
 
