@@ -2,15 +2,17 @@
 
 {% block content %}
     <div class="island">
-        <div class="theme">
-            <a href="/theme/{{ post.category }}">{{ post.category }}</a>
-        </div>
-        <div class="heading">
-            <a href="/post/{{ post.id }}">{{ post.header }}</a>
-        </div>
-        <div class="pubdate">{{ post.created_at.ctime() }}</div>
-        <div class="author">
-            <a href="/author/{{ post.user.id }}">{{ post.user.username }}</a>
+        <div class="lock">
+            <div class="theme">
+                <a href="/theme/{{ post.category }}">{{ post.category }}</a>
+            </div>
+            <div class="heading">
+                <a href="/post/{{ post.id }}">{{ post.header }}</a>
+            </div>
+            <div class="pubdate">{{ post.created_at.ctime() }}</div>
+            <div class="author">
+                <a href="/author/{{ post.user.id }}">{{ post.user.username }}</a>
+            </div>
         </div>
         <div class="text">{{ post.body }}</div>
     </div>
