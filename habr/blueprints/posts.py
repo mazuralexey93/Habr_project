@@ -2,10 +2,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from werkzeug.exceptions import NotFound
 
-from habr.models.post import Post, CategoryChoices, PostStatus
+from habr.models.post import Post, CategoryChoices, PostStatus, Comment
 from habr.models.user import User
 from habr.models.database import db
-from habr.forms.post import CreateArticleForm
+from habr.forms.post import AddCommentForm, CreateArticleForm, UpdateCommentForm
 
 themes_dic = {
     'design': 'Дизайн',
@@ -51,8 +51,18 @@ def author_filter(pk: int):
 @posts.route('/post/<int:pk>')
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
+    comment = Comment.query.filter_by(post_id=pk).order_by(db.desc(Comment.date_posted)).all()
+    selected_post.views += 1
+    db.session.commit()
+    form = AddCommentForm()
+    if request.method == 'POST':
+        username = current_user.username
+        comment = Comment(username=username, body=form.body.data, post_id=pk)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('posts.post_list', post_id=pk))
     title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article.html', post=selected_post, title=title)
+    return render_template('article.html', post=selected_post, title=title, comment=comment, form=form, post_id=pk)
 
 
 @login_required
@@ -60,10 +70,12 @@ def concrete_post(pk: int):
 def create_article():
     form = CreateArticleForm(request.form)
     form.category.choices = [x for x in CategoryChoices.__members__]
-    form.status.choices = [y for y in PostStatus.__members__ if y != 'PUBLISHED' and y != 'NEED_REFACTOR' and y != 'ARCHIEVED']
+    form.status.choices = [y for y in PostStatus.__members__ if
+                           y != 'PUBLISHED' and y != 'NEED_REFACTOR' and y != 'ARCHIEVED']
 
     if request.method == "POST" and form.validate_on_submit():
-        post = Post(category=form.category.data, header=form.title.data, body=form.text.data, description=form.description.data, status=form.status.data)
+        post = Post(category=form.category.data, header=form.title.data, body=form.text.data,
+                    description=form.description.data, status=form.status.data)
         if current_user:
             post.user_id = current_user.id
         else:
@@ -79,6 +91,7 @@ def create_article():
 
     return render_template('article_create.html', form=form)
 
+
 @login_required
 @posts.route('/post/update/<int:pk>/', methods=['GET', 'POST'])
 def update_article(pk):
@@ -92,23 +105,45 @@ def update_article(pk):
             flash("Can't update another user's post!")
             return redirect(url_for('posts.concrete_post', pk=pk))
 
-    if request.method == "POST" and form.validate_on_submit():
-        post.header = form.title.data
-        post.category = form.category.data
-        post.description = form.description.data
-        post.status = form.status.data
-        post.body = form.text.data
-        post.user = current_user
-        db.session.add(post)
-        db.session.commit()
-        flash('Post has been updated!')
-        return redirect(url_for('posts.concrete_post', pk=pk))
+        if request.method == "POST" and form.validate_on_submit():
+            post.header = form.title.data
+            post.category = form.category.data
+            post.description = form.description.data
+            post.status = form.status.data
+            post.body = form.text.data
+            post.user = current_user
+            db.session.add(post)
+            db.session.commit()
+            flash('Post has been updated!')
+            return redirect(url_for('posts.concrete_post', pk=pk))
 
-    form.title.data = post.header
-    form.category.data = post.category
-    form.description.data = post.description
-    form.text.data = post.body
-    return render_template('article_update.html', form=form)
+        form.title.data = post.header
+        form.category.data = post.category
+        form.description.data = post.description
+        form.text.data = post.body
+        return render_template('article_update.html', form=form)
+
+
+@posts.route('/post/<int:pk>/delete')
+def concrete_post_delete(pk: int):
+    selected_post = Post.query.filter_by(id=pk).first_or_404()
+    title = selected_post.user.username + ' «' + selected_post.header + '»'
+    return render_template('article_update.html', post=selected_post, title=title)
+
+
+@posts.route('/comment/<int:comment_id>/update/', methods=['GET', 'POST'])
+def update_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    form = UpdateCommentForm()
+    if request.method == 'GET':
+        form.body.data = comment.body
+
+    if form.validate_on_submit():
+        comment.body = form.body.data
+        db.session.commit()
+        return redirect(url_for('posts.post_list', post_id=comment.post_id))
+
+    return render_template('comment_update.html', form=form)
 
 
 @posts.route('/post/delete/<int:pk>')

@@ -17,6 +17,7 @@
             <a class="list-group-item{% if menu == 'account' %} active{% endif %}" href="/profile/">Личный кабинет:<br>{{current_user.username}}</a>
             <a class="list-group-item" href="/post/create//"> Добавить статью </a>
             <a class="list-group-item{% if menu == 'logout' %} active{% endif %}" href="/logout/"> Logout </a>
+
         {% endif %}
     </nav>
 </div>
