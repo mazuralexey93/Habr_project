@@ -8,5 +8,5 @@ class CreateArticleForm(FlaskForm):
     text = CKEditorField('Текст', [validators.DataRequired()])
     category = SelectField('Категория', [validators.DataRequired()])
     description = CKEditorField('Описание', [validators.DataRequired()])
-    submit = SubmitField('Добавить')
+    submit = SubmitField('Сохранить')
     status = SelectField('Cтатус')
