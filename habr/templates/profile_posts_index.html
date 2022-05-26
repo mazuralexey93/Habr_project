@@ -1,12 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="heading">
-       <a href="/create/"> Создать черновик статьи </a>
-    </div>
+    <div class="island">
+        <div class="heading">
+            <a href="/post/create/"> Создать новую статью </a>
+        </div>
 
-    <div class="heading">
-        <a href="/profile/posts/all/"> Мои статьи </a>
-    </div>
+        <div class="heading">
+            <a href="/profile/posts/all/"> Черновики (не опубликованы)  </a>
+        </div>
 
+        <div class="heading">
+            <a href="/profile/posts/all/"> Опубликованные </a>
+        </div>
+
+        <div class="heading">
+            <a href="/profile/posts/all/"> На модерации </a>
+        </div>
+
+        <div class="heading">
+            <a href="/profile/posts/all/"> Требуют редактирования </a>
+        </div>
+
+        <div class="heading">
+            <a href="/profile/posts/all/"> В архиве </a>
+        </div>
+    </div>
 {% endblock %}

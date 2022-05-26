@@ -4,31 +4,34 @@
     <meta charset="UTF-8">
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
     <title>{{ title }}</title>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <p>Meine Habr</p>
-        </div>
-    </header>
-    <main>
-        <div class="container">
-            {% include 'mainmenu.html' %}
-            <div class="content">
+<header>
+    <div class="container">
+        <p>Meine Habr</p>
+    </div>
+</header>
+<main>
+    <div class="container">
+        {% include 'mainmenu.html' %}
+        <div class="content">
+            {% if pageheader %}
                 <div class="island">
-                    <h1>{{ title }}</h1>
+                    <h1>{{ pageheader }}</h1>
                 </div>
-                {% block content %}{% endblock %}
-            </div>
+            {% endif %}
+            {% block content %}{% endblock %}
         </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p><i>&copy; AAK DoppelKommande, 2022</i></p>
-        </div>
-    </footer>
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
-</script>
+    </div>
+</main>
+<footer>
+    <div class="container">
+        <p><i>&copy; AAK DoppelKommande, 2022</i></p>
+    </div>
+</footer>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+{{ ckeditor.load() }}
 </body>
 </html>
