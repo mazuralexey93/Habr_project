@@ -63,7 +63,7 @@ def concrete_post(pk: int):
         db.session.commit()
         return redirect(url_for('posts.post_list', post_id=pk))
     title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article.html', post=selected_post, title=title, comment=comment, form=form,post_id=pk)
+    return render_template('article.html', post=selected_post, title=title, comment=comment, form=form, post_id=pk)
 
 
 @login_required
@@ -73,7 +73,8 @@ def create_article():
     form.category.choices = [x for x in CategoryChoices.__members__]
 
     if request.method == "POST" and form.validate_on_submit():
-        post = Post(category=form.category.data, header=form.title.data.strip(), body=form.text.data, description=form.description.data)
+        post = Post(category=form.category.data, header=form.title.data.strip(), body=form.text.data,
+                    description=form.description.data)
         if current_user:
             post.user_id = current_user.id
         else:
@@ -96,7 +97,7 @@ def concrete_post_delete(pk: int):
     return render_template('article_update.html', post=selected_post, title=title)
 
 
-@posts.route('/comment/<int:comment_id>/update/', methods=['GET','POST'])
+@posts.route('/comment/<int:comment_id>/update/', methods=['GET', 'POST'])
 def update_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     form = UpdateCommentForm()

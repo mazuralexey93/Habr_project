@@ -50,14 +50,18 @@
             </div>
             {% for i in comment %}
             <div class="body_comment">
-                
-                <div>
-                    <a href="{{ url_for('posts.post_list', username=i.username) }}">{{ i.username }}</a>
-                </div>
-                {{i.body}} {{i.id}}
+                <div class="pubdate">{{ i.date_posted.ctime() }}</div>
 
-                <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Обновить комментарий</p></a>
-                
+                <div class="author">
+                    <a href="{{ url_for('posts.post_list', username=i.username) }}">  {{ i.username }}   </a>
+                </div>
+
+                <div class="text">
+                    {{i.body}}
+                </div>
+
+                <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Редактировать комментарий</p></a>
+
             </div>
             {% endfor %}
 
