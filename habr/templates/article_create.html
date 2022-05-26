@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
  {{ ckeditor.load() }}
 
+<<<<<<< HEAD
  {% block title %}
    Новая статья
  {% endblock %}
@@ -15,7 +16,6 @@
      {% endif %}
      <form method="post">
        {{ form.csrf_token }}
-{#      {{ ckeditor.create(value='blah...blah...') }}#}
 
        {% for field_name in ['title', 'category', 'status', 'text', 'description'] %}
 
@@ -30,3 +30,34 @@
 
    </div>
  {% endblock %}
+=======
+{% block title %}
+    Новая статья
+{% endblock %}
+
+{% block content %}
+    <div class="island">
+        <div class="heading">Добавление статьи</div>
+
+        {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {{ form.csrf_token }}
+
+            {% for field_name in ['title', 'category', 'text', 'description'] %}
+                {% set field = form[field_name] %}
+
+                <div class="my-3">
+                    {{ field.label(class="form-label") }}
+
+                    {{ field(class="form-control") }}
+                </div>
+            {% endfor %}
+
+            {{ form.submit(class="btn btn-primary my-3") }}
+        </form>
+    </div>
+{% endblock %}
+>>>>>>> 61b8022e46a254ca9585b903d02e855ce3556a6f
