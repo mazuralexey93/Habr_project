@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Article #{{ post.id }}: {{ post.title }}
+{% endblock %}
+
 {% block content %}
+    {% for message in get_flashed_messages() %}  {{ message }} {% endfor %}
     <div class="island">
         <div class="lock">
             <div class="theme">
@@ -14,6 +19,14 @@
                 <a href="/author/{{ post.user.id }}">{{ post.user.username }}</a>
             </div>
         </div>
+<<<<<<< HEAD
+        <div class="text">{{ post.body | safe }}</div>
+        <div class="text">Статус: {{ post.status }}</div>
+
+        <a href="/post/update/{{ post.id }}">Редактировать</a>
+        <a href="/post/delete/{{ post.id }}">Удалить</a>
+=======
         <div class="text">{{ post.body }}</div>
+>>>>>>> 61b8022e46a254ca9585b903d02e855ce3556a6f
     </div>
 {% endblock %}

@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from werkzeug.exceptions import NotFound
 
-from habr.models.post import Post, CategoryChoices
+from habr.models.post import Post, CategoryChoices, PostStatus
 from habr.models.user import User
 from habr.models.database import db
 from habr.forms.post import CreateArticleForm
@@ -56,19 +56,21 @@ def concrete_post(pk: int):
 
 
 @login_required
-@posts.route('/create/', methods=['GET', 'POST'])
+@posts.route('/post/create/', methods=['GET', 'POST'])
 def create_article():
     form = CreateArticleForm(request.form)
     form.category.choices = [x for x in CategoryChoices.__members__]
+    form.status.choices = [y for y in PostStatus.__members__ if y != 'PUBLISHED' and y != 'NEED_REFACTOR' and y != 'ARCHIEVED']
 
     if request.method == "POST" and form.validate_on_submit():
-        post = Post(category=form.category.data, header=form.title.data.strip(), body=form.text.data, description=form.description.data)
+        post = Post(category=form.category.data, header=form.title.data, body=form.text.data, description=form.description.data, status=form.status.data)
         if current_user:
             post.user_id = current_user.id
         else:
             user = User(user_id=current_user.id)
             db.session.add(user)
             db.session.flush()
+            post.status = PostStatus.NOT_PUBLISHED
             post.user_id = user.id
         db.session.add(post)
         db.session.commit()
@@ -77,9 +79,46 @@ def create_article():
 
     return render_template('article_create.html', form=form)
 
+@login_required
+@posts.route('/post/update/<int:pk>/', methods=['GET', 'POST'])
+def update_article(pk):
+    form = CreateArticleForm(request.form)
+    form.category.choices = [x for x in CategoryChoices.__members__]
+    form.status.choices = [y for y in PostStatus.__members__ if y != 'PUBLISHED' and y != 'NEED_REFACTOR']
+    post = Post.query.get_or_404(pk)
 
-@posts.route('/post/<int:pk>/delete')
-def concrete_post_delete(pk: int):
-    selected_post = Post.query.filter_by(id=pk).first_or_404()
-    title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article_update.html', post=selected_post, title=title)
+    if request.method == 'GET':
+        if current_user != post.user:
+            flash("Can't update another user's post!")
+            return redirect(url_for('posts.concrete_post', pk=pk))
+
+    if request.method == "POST" and form.validate_on_submit():
+        post.header = form.title.data
+        post.category = form.category.data
+        post.description = form.description.data
+        post.status = form.status.data
+        post.body = form.text.data
+        post.user = current_user
+        db.session.add(post)
+        db.session.commit()
+        flash('Post has been updated!')
+        return redirect(url_for('posts.concrete_post', pk=pk))
+
+    form.title.data = post.header
+    form.category.data = post.category
+    form.description.data = post.description
+    form.text.data = post.body
+    return render_template('article_update.html', form=form)
+
+
+@posts.route('/post/delete/<int:pk>')
+def delete_article(pk: int):
+    post = Post.query.get_or_404(pk)
+    if request.method == 'GET':
+        if current_user != post.user:
+            flash("Can't delete another user's post!")
+            return redirect(url_for('posts.concrete_post', pk=pk))
+
+    post.status = PostStatus.ARCHIEVED
+
+    return render_template('index.html')

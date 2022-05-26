@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField, TextAreaField, SelectField
-
-from habr.models.database import CategoryChoices
+from flask_ckeditor import CKEditorField
+from wtforms import StringField, validators, SubmitField, SelectField
 
 
 class CreateArticleForm(FlaskForm):
     title = StringField('Название статьи', [validators.DataRequired()])
-    text = TextAreaField('Текст', [validators.DataRequired()])
+    text = CKEditorField('Текст', [validators.DataRequired()])
     category = SelectField('Категория', [validators.DataRequired()])
-    description = TextAreaField('Описание', [validators.DataRequired()])
+    description = CKEditorField('Описание', [validators.DataRequired()])
     submit = SubmitField('Добавить')
+    status = SelectField('Cтатус')

@@ -17,6 +17,13 @@
             <a class="list-group-item{% if menu == 'account' %} active{% endif %}" href="/profile/">Личный кабинет:<br>{{current_user.username}}</a>
             <a class="list-group-item" href="/create/"> Добавить статью </a>
             <a class="list-group-item{% if menu == 'logout' %} active{% endif %}" href="/logout/"> Logout </a>
+<<<<<<< HEAD
+            <a hidden="true" class="list-group-item{% if menu == 'login' %} active{% endif %}" href="/login/"> Login </a>
+            <a class="list-group-item{% if menu == 'account' %} active{% endif %}"
+               href="/profile/">Личный кабинет: {{current_user.username}}</a>
+            <a class="p-2 text dark" href="/post/create/"> Добавить статью </a>
+=======
+>>>>>>> 61b8022e46a254ca9585b903d02e855ce3556a6f
         {% endif %}
     </nav>
 </div>
