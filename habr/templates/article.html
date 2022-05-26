@@ -23,8 +23,8 @@
         <div class="text">{{ post.body | safe }}</div>
         <div class="text">Статус: {{ post.status }}</div>
 
-        <a href="/post/update/{{ post.id }}">Редактировать</a>
-        <a href="/post/delete/{{ post.id }}">Удалить</a>
+        <a class="btn btn-primary" href="/post/update/{{ post.id }}">Редактировать</a>
+        <a class="btn btn-danger" href="/post/delete/{{ post.id }}">Удалить</a>
 
     </div>
 {% endblock %}
