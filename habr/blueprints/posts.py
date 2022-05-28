@@ -49,7 +49,7 @@ def author_filter(pk: int):
     return render_template('index.html', title=title, postlist=postlist)
 
 
-@posts.route('/post/<int:pk>')
+@posts.route('/post/<int:pk>', methods=['GET','POST'])
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
     comment = Comment.query.filter_by(post_id=pk).order_by(db.desc(Comment.date_posted)).all()
@@ -57,11 +57,12 @@ def concrete_post(pk: int):
     db.session.commit()
     form = AddCommentForm()
     if request.method == 'POST':
-        username = current_user.username
-        comment = Comment(username=username, body=form.body.data, post_id=pk)
-        db.session.add(comment)
-        db.session.commit()
-        return redirect(url_for('posts.post_list', post_id=pk))
+        if form.validate_on_submit():
+            username = current_user.username
+            comment = Comment(username=username, body=form.body.data, post_id=pk)
+            db.session.add(comment)
+            db.session.commit()
+            return redirect(url_for('posts.concrete_post', pk=pk))
     title = selected_post.user.username + ' «' + selected_post.header + '»'
     return render_template('article.html', post=selected_post, title=title, comment=comment, form=form,post_id=pk)
 
