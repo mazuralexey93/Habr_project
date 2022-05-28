@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_ckeditor import CKEditor
 
 import commands
 from habr.instruments import login_manager
@@ -14,6 +15,7 @@ from habr.models.user import User
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    ckeditor = CKEditor(app)
     app.config.from_object(Config)
 
     register_instruments(app)

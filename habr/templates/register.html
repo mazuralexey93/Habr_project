@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% from 'macros/form.html' import render_field %}
+
+{% block title %}User register{% endblock %}
+
+{% block content %}
+    <div class="island">
+        <div class="heading">User register</div>
+
+        <form method="post">
+            {{ form.csrf_token }}
+
+            {% for field in ['email', 'username', 'password', 'confirm'] %}
+                {{ render_field(form[field]) }}
+            {% endfor%}
+
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+{% endblock %}

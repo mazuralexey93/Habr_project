@@ -1,66 +1,85 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Article #{{ post.id }}: {{ post.title }}
+{% endblock %}
+
 {% block content %}
+    {% for message in get_flashed_messages() %}  {{ message }} {% endfor %}
     <div class="island">
-        <div class="theme">
-            <a href="/theme/{{ post.category }}">{{ post.category }}</a>
+        <div class="lock">
+            <div class="theme">
+                <a href="/theme/{{ post.category }}">{{ post.category }}</a>
+            </div>
+            <div class="heading">
+                <a href="/post/{{ post.id }}">{{ post.header }}</a>
+            </div>
+            <div class="pubdate">{{ post.created_at.ctime() }}</div>
+            <div class="author">
+                <a href="/author/{{ post.user.id }}">{{ post.user.username }}</a>
+            </div>
         </div>
-        <div class="heading">
-            <a href="/post/{{ post.id }}">{{ post.header }}</a>
-        </div>
-        <div class="pubdate">{{ post.created_at.ctime() }}</div>
-        <div class="author">
-            <a href="/author/{{ post.user.id }}">{{ post.user.username }}</a>
-        </div>
-        <div class="text">{{ post.body }}</div>
+
+
+        <div class="text">{{ post.body | safe }}</div>
+        <div class="text">Статус: {{ post.status }}</div>
+
+        <a class="btn btn-primary" href="/post/update/{{ post.id }}">Редактировать</a>
+        <a class="btn btn-danger" href="/post/delete/{{ post.id }}">Удалить</a>
         <div class="stat_post">
-            <div class="stat_left">&#128065 {{post.views}}</div>
-            <div class="stat_right">&#10084 {{post.likes}}</div>
+            <div class="stat_left">&#128065 {{ post.views }}</div>
+            <div class="stat_right">&#10084 {{ post.likes }}</div>
         </div>
 
         <div class="comment">
             <div class="content_comment">
-            <form method="POST" action="{{ url_for('posts.concrete_post', pk=post_id) }}">
-                {{ form.hidden_tag()}}
-                {{ form.csrf_token }}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Добавьте свой комментарий</legend>
-                    <div class="form-group">
-                        {{ form.body.label(class="form-control-label") }}
-                        <p></p>
-                        {% if form.body.errors %}
-                            {{ form.body(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.body.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.body(class="form-control form-control-lg") }}
-                        {% endif %}
-                    </div>
-                </fieldset>
+                <form method="POST" action="{{ url_for('posts.concrete_post', pk=post_id) }}">
+                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Добавьте свой комментарий</legend>
+                        <div class="form-group">
+                            {{ form.body.label(class="form-control-label") }}
+                            <p></p>
+                            {% if form.body.errors %}
+                                {{ form.body(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.body.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.body(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
 
-                <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
-                </div>
-            </form>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
 
 
             </div>
             {% for i in comment %}
-            <div class="body_comment">
-                
-                <div>
-                    <a href="{{ url_for('posts.post_list', username=i.username) }}">{{ i.username }}</a>
-                </div>
-                {{i.body}} {{i.id}}
+                <div class="body_comment">
+                    <div class="pubdate">{{ i.date_posted.ctime() }}</div>
 
-                <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Обновить комментарий</p></a>
-                
-            </div>
+                    <div class="author">
+                        <a href="{{ url_for('posts.post_list', username=i.username) }}">  {{ i.username }}   </a>
+                    </div>
+
+                    <div class="text">
+                        {{ i.body }}
+                    </div>
+
+                    <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Редактировать комментарий</p>
+                    </a>
+
+                </div>
             {% endfor %}
 
         </div>
+
     </div>
 {% endblock %}

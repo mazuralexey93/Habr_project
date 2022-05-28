@@ -32,8 +32,8 @@ class Post(db.Model):
     user = db.relationship('User', backref='post', uselist=False)
 
     comments = db.relationship('Comment', backref='comment_post', lazy=True, cascade="all, delete-orphan")
-    views = db.Column(db.Integer, default=0)
-    likes = db.Column(db.Integer, default=0)
+    views = db.Column(db.Integer, default='0')
+    likes = db.Column(db.Integer, default='0')
 
 
 def __repr__(self):
