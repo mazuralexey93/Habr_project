@@ -146,7 +146,7 @@ def update_comment(comment_id):
         if form.validate_on_submit():
             comment.body = form.body.data
             db.session.commit()
-            return redirect(url_for('posts.post_list', post_id=comment.post_id))
+            return redirect(url_for('posts.concrete_post', pk=comment.post_id))
 
     return render_template('comment_update.html', form=form)
 
