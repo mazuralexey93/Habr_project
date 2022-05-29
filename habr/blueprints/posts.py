@@ -48,6 +48,7 @@ def author_filter(pk: int):
     return render_template('index.html', title=title, postlist=postlist)
 
 
+@login_required
 @posts.route('/post/<int:pk>', methods=['GET','POST'])
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
@@ -132,17 +133,20 @@ def concrete_post_delete(pk: int):
     return render_template('article_update.html', post=selected_post, title=title)
 
 
+@login_required
 @posts.route('/comment/<int:comment_id>/update/', methods=['GET', 'POST'])
 def update_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     form = UpdateCommentForm()
-    if request.method == 'GET':
-        form.body.data = comment.body
 
-    if form.validate_on_submit():
-        comment.body = form.body.data
-        db.session.commit()
-        return redirect(url_for('posts.post_list', post_id=comment.post_id))
+    if comment.username == current_user.username:
+        if request.method == 'GET':
+            form.body.data = comment.body
+
+        if form.validate_on_submit():
+            comment.body = form.body.data
+            db.session.commit()
+            return redirect(url_for('posts.post_list', post_id=comment.post_id))
 
     return render_template('comment_update.html', form=form)
 
