@@ -151,6 +151,16 @@ def update_comment(comment_id):
     return render_template('comment_update.html', form=form)
 
 
+@login_required
+@posts.route('/comment/<int:comment_id>/delete/')
+def delete_comment(comment_id):
+    remove_comment = Comment.query.get_or_404(comment_id)
+    if remove_comment.username == current_user.username:
+        db.session.delete(remove_comment)
+        db.session.commit()
+        return redirect(url_for('posts.concrete_post', pk=remove_comment.post_id))
+
+
 @posts.route('/post/delete/<int:pk>')
 def delete_article(pk: int):
     post = Post.query.get_or_404(pk)

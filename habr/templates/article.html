@@ -74,8 +74,8 @@
                     </div>
 
                     {% if post.author == current_user or current_user.username == i.username %}
-                    <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Редактировать комментарий</p>
-                    </a>
+                    <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Редактировать комментарий</p></a>
+                    <a href="{{ url_for('posts.delete_comment', comment_id=i.id) }}"><p>Удалить комментарий</p></a>
                     {% else %}
                     {% endif %}
 
