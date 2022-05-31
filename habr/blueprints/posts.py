@@ -139,7 +139,7 @@ def update_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     form = UpdateCommentForm()
 
-    if comment.username == current_user.username:
+    if comment.username == current_user.username or current_user.is_admin == True:
         if request.method == 'GET':
             form.body.data = comment.body
 
@@ -155,7 +155,7 @@ def update_comment(comment_id):
 @posts.route('/comment/<int:comment_id>/delete/')
 def delete_comment(comment_id):
     remove_comment = Comment.query.get_or_404(comment_id)
-    if remove_comment.username == current_user.username:
+    if remove_comment.username == current_user.username or current_user.is_admin == True:
         db.session.delete(remove_comment)
         db.session.commit()
         return redirect(url_for('posts.concrete_post', pk=remove_comment.post_id))

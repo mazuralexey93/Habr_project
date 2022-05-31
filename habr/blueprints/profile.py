@@ -26,7 +26,7 @@ def user_profile_page():
 def user_profile_info():
 
     user_profile = User.query.get(current_user.id)
-    profile_info = Profile.query.filter_by(user_id=current_user.id).one_or_none()
+    profile_info = Profile.query.filter_by(user_id=current_user.id).first()
     title = f'Личные данные {current_user.username}'
     return render_template('profile_info.html', title=title, user=user_profile, profile=profile_info)
 
