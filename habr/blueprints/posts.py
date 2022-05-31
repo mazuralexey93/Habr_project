@@ -49,7 +49,7 @@ def author_filter(pk: int):
 
 
 @login_required
-@posts.route('/post/<int:pk>', methods=['GET','POST'])
+@posts.route('/post/<int:pk>', methods=['GET', 'POST'])
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
     comment = Comment.query.filter_by(post_id=pk).order_by(db.desc(Comment.date_posted)).all()
@@ -120,17 +120,11 @@ def update_article(pk):
             return redirect(url_for('posts.concrete_post', pk=pk))
 
         form.title.data = post.header
+        # form.status.data = post.status
         form.category.data = post.category
         form.description.data = post.description
         form.text.data = post.body
         return render_template('article_update.html', form=form)
-
-
-@posts.route('/post/<int:pk>/delete')
-def concrete_post_delete(pk: int):
-    selected_post = Post.query.filter_by(id=pk).first_or_404()
-    title = selected_post.user.username + ' «' + selected_post.header + '»'
-    return render_template('article_update.html', post=selected_post, title=title)
 
 
 @login_required
@@ -159,6 +153,13 @@ def delete_comment(comment_id):
         db.session.delete(remove_comment)
         db.session.commit()
         return redirect(url_for('posts.concrete_post', pk=remove_comment.post_id))
+
+
+@posts.route('/post/<int:pk>/delete')
+def concrete_post_delete(pk: int):
+    selected_post = Post.query.filter_by(id=pk).first_or_404()
+    title = selected_post.user.username + ' «' + selected_post.header + '»'
+    return render_template('article_update.html', post=selected_post, title=title)
 
 
 @posts.route('/post/delete/<int:pk>')
