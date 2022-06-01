@@ -50,7 +50,6 @@ def user_posts_page():
 
 @profile.route("/posts/<status_name>/")
 def status_filter(status_name: str):
-    user_profile = User.query.filter_by(id=current_user.id).first_or_404()
     if status_name not in status_dic.keys():
         raise NotFound('Нет такого статуса у статей!')
     postlist = Post.query\

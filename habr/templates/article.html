@@ -24,8 +24,13 @@
         <div class="text">{{ post.body | safe }}</div>
         <div class="text">Статус: {{ post.status }}</div>
 
-        <a class="btn btn-primary" href="/post/update/{{ post.id }}">Редактировать</a>
-        <a class="btn btn-danger" href="/post/delete/{{ post.id }}">Удалить</a>
+        {% if post.user == current_user or current_user.is_admin == True %}
+
+            <a class="btn btn-primary" href="/post/update/{{ post.id }}">Редактировать</a>
+            <a class="btn btn-danger" href="/post/delete/{{ post.id }}">Удалить</a>
+
+        {% endif %}
+
         <div class="stat_post">
             <div class="stat_left">&#128065 {{ post.views }}</div>
             <div class="stat_right">&#10084 {{ post.likes }}</div>
@@ -73,7 +78,8 @@
                         {{ i.body }}
                     </div>
 
-                    {% if post.author == current_user or current_user.username == i.username or current_user.is_admin == True %}
+                    {% if current_user.username == i.username or current_user.is_admin == True %}
+                        {#                    {% if post.author == current_user or current_user.username == i.username or current_user.is_admin == True %}#}
                         <div>
                             <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}">Редактировать
                                 комментарий</a>
