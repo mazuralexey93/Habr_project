@@ -72,11 +72,10 @@ def show_user_posts():
     return render_template('index.html', title=title, postlist=postlist, user=user_profile)
 
 @login_required
-@profile.route("/posts/moderation/")
-def moder_user_posts():
-    user_profile = User.query.filter_by(id=current_user.id).first_or_404()
-    postlist = Post.query.filter_by(user_id=current_user.id).order_by(
-                Post.created_at.desc()).all()
+@profile.route("/admin/<status>/")
+def moder_user_posts(status: str):
+    status = 'modering'
+    postlist = Post.query.filter(Post.status == status.upper()).order_by(Post.created_at.desc()).all()
 
     title = f'Статьи пользователя {current_user.username} на модерации'
-    return render_template('article_moder.html', title=title, postlist=postlist, user=user_profile)
+    return render_template('index.html', title=title, postlist=postlist)

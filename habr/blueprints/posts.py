@@ -23,16 +23,18 @@ posts = Blueprint(
 
 @posts.route('/')
 def post_list():
-    postlist = Post.query.order_by(Post.created_at.desc()).all()
+    status = 'published'
+    postlist = Post.query.filter(Post.status == status.upper()).order_by(Post.created_at.desc()).all()
     return render_template('index.html', menu='main', title="Главная страница",
                            pageheader="Главная страница", postlist=postlist)
 
 
 @posts.route("/theme/<theme_name>/")
 def theme_filter(theme_name: str):
+    status = 'published'
     if theme_name not in themes_dic.keys():
         raise NotFound('Нет такой категории!')
-    postlist = Post.query.filter(Post.category == theme_name.upper()).order_by(
+    postlist = Post.query.filter(Post.status == status.upper()).filter(Post.category == theme_name.upper()).order_by(
         Post.created_at.desc()).all()
     return render_template('index.html', menu=theme_name,
                            pageheader=themes_dic[theme_name],
@@ -41,8 +43,9 @@ def theme_filter(theme_name: str):
 
 @posts.route("/author/<int:pk>/")
 def author_filter(pk: int):
+    status = 'published'
     author = User.query.filter_by(id=pk).first_or_404()
-    postlist = Post.query.filter_by(user_id=pk).order_by(
+    postlist = Post.query.filter(Post.status == status.upper()).filter_by(user_id=pk).order_by(
         Post.created_at.desc()).all()
     title = f'Все статьи автора {author.username}'
     return render_template('index.html', title=title, postlist=postlist)
@@ -113,7 +116,6 @@ def update_article(pk):
         post.description = form.description.data
         post.status = form.status.data
         post.body = form.text.data
-        # post.user = current_user
         db.session.add(post)
         db.session.commit()
         flash('Post has been updated!')
@@ -135,6 +137,26 @@ def delete_article(pk: int):
 
     if post.user == current_user or current_user.is_admin == True:
         post.status = PostStatus.ARCHIEVED
+        db.session.add(post)
+        db.session.commit()
+    return redirect(url_for('posts.concrete_post', pk=pk))
+
+
+@posts.route('/post/need_ref/<int:pk>')
+def need_ref_article(pk: int):
+    post = Post.query.get_or_404(pk)
+    if current_user.is_staff == True or current_user.is_admin == True:
+        post.status = PostStatus.NEED_REFACTOR
+        db.session.add(post)
+        db.session.commit()
+    return redirect(url_for('posts.concrete_post', pk=pk))
+
+
+@posts.route('/post/publish/<int:pk>')
+def pub_article(pk: int):
+    post = Post.query.get_or_404(pk)
+    if current_user.is_staff == True or current_user.is_admin == True:
+        post.status = PostStatus.PUBLISHED
         db.session.add(post)
         db.session.commit()
     return redirect(url_for('posts.concrete_post', pk=pk))
