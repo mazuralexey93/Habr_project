@@ -13,7 +13,7 @@ class CreateArticleForm(FlaskForm):
 
 
 class AddCommentForm(FlaskForm):
-    body = StringField('Ваш комментарий', [validators.DataRequired()])
+    body = StringField('Ваш комментарий', [validators.InputRequired()])
     submit = SubmitField('Добавить')
 
 

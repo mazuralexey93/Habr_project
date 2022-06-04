@@ -24,8 +24,22 @@
         <div class="text">{{ post.body | safe }}</div>
         <div class="text">Статус: {{ post.status }}</div>
 
-        <a class="btn btn-primary" href="/post/update/{{ post.id }}">Редактировать</a>
-        <a class="btn btn-danger" href="/post/delete/{{ post.id }}">Удалить</a>
+        {% if post.user == current_user or current_user.is_admin == True %}
+
+            <a class="btn btn-primary" href="/post/update/{{ post.id }}">Редактировать</a>
+            <a class="btn btn-danger" href="/post/delete/{{ post.id }}">Удалить</a>
+
+        {% endif %}
+
+     {% if  current_user.is_staff == True or current_user.is_admin == True %}
+
+         <div class="island">
+         <a class="btn btn-secondary" href="/post/need_ref/{{ post.id }}">Требует редактирования</a>
+            <a class="btn btn-success" href="/post/publish/{{ post.id }}">Опубликовать</a>
+{#            <a class="btn btn-info" href="/?/{{ post.id }}">Бан пользователя</a>#}
+         </div>
+
+    {% endif %}
         <div class="stat_post">
             <div class="stat_left">&#128065 {{ post.views }}</div>
             <div class="stat_right">&#10084 {{ post.likes }}</div>
@@ -33,7 +47,7 @@
 
         <div class="comment">
             <div class="content_comment">
-                <form method="POST" action="{{ url_for('posts.post_list', post_id=post_id) }}">
+                <form method="POST" action="{{ url_for('posts.concrete_post', pk=post_id) }}">
                     {{ form.hidden_tag() }}
                     {{ form.csrf_token }}
                     <fieldset class="form-group">
@@ -73,8 +87,17 @@
                         {{ i.body }}
                     </div>
 
-                    <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}"><p>Редактировать комментарий</p>
-                    </a>
+                    {% if current_user.username == i.username or current_user.is_admin == True %}
+                        <div>
+                            <a href="{{ url_for('posts.update_comment', comment_id=i.id) }}">Редактировать
+                                комментарий</a>
+                        </div>
+                        <div>
+                            <a href="{{ url_for('posts.delete_comment', comment_id=i.id) }}">Удалить комментарий</a>
+                        </div>
+
+                    {% else %}
+                    {% endif %}
 
                 </div>
             {% endfor %}

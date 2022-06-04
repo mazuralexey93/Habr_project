@@ -3,7 +3,7 @@
 {% block content %}
     <div class="island">
         <div class="heading">
-           <a href="/profile/about/"> Личные данные</a>
+            <a href="/profile/about/"> Личные данные</a>
         </div>
 
         <div class="heading">
@@ -13,5 +13,11 @@
         <div class="heading">
             <a href="/profile/notifications/"> Уведомления </a>
         </div>
+        {% if  current_user.is_staff == True or current_user.is_admin == True %}
+
+            <div class="heading">
+                <a href="/profile/admin/modering/"> Модерация статей </a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
