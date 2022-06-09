@@ -20,28 +20,29 @@ profile = Blueprint(
     url_prefix='/profile')
 
 
-@login_required
 @profile.route("/")
 def user_profile_page():
-
+    if current_user.is_anonymous:
+        raise Forbidden()
     user_profile = User.query.get(current_user.id)
     title = f'Личный кабинет {current_user.username}'
     return render_template('profile_index_page.html', title=title, user=user_profile)
 
 
-@login_required
 @profile.route("/about/")
 def user_profile_info():
-
+    if current_user.is_anonymous:
+        raise Forbidden()
     user_profile = User.query.get(current_user.id)
     profile_info = Profile.query.filter_by(user_id=current_user.id).first()
     title = f'Личные данные {current_user.username}'
     return render_template('profile_info.html', title=title, user=user_profile, profile=profile_info)
 
 
-@login_required
 @profile.route("/posts/")
 def user_posts_page():
+    if current_user.is_anonymous:
+        raise Forbidden()
     user_profile = User.query.filter_by(id=current_user.id).first_or_404()
     title = f'Статьи {current_user.username}'
     return render_template('profile_posts_index.html', title=title, user=user_profile)
@@ -51,26 +52,28 @@ def user_posts_page():
 def status_filter(status_name: str):
     if status_name not in status_dic.keys():
         raise NotFound()
-    postlist = Post.query\
-        .filter(Post.status == status_name.upper())\
-        .filter_by(user_id=current_user.id)\
+    postlist = Post.query \
+        .filter(Post.status == status_name.upper()) \
+        .filter_by(user_id=current_user.id) \
         .order_by(
         Post.created_at.desc()).all()
     return render_template('index.html', menu=status_name,
                            pageheader=status_dic[status_name],
                            title=status_dic[status_name], postlist=postlist)
 
-@login_required
+
 @profile.route("/posts/all/")
 def show_user_posts():
+    if current_user.is_anonymous:
+        raise Forbidden()
     user_profile = User.query.filter_by(id=current_user.id).first_or_404()
     postlist = Post.query.filter_by(user_id=current_user.id).order_by(
-                Post.created_at.desc()).all()
+        Post.created_at.desc()).all()
 
     title = f'Все статьи {current_user.username}'
     return render_template('index.html', title=title, postlist=postlist, user=user_profile)
 
-@login_required
+
 @profile.route("/admin/<status>/")
 def moder_user_posts(status: str):
     status = 'modering'
