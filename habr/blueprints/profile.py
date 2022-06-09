@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from werkzeug.exceptions import NotFound
-
+from werkzeug.exceptions import NotFound, Forbidden
 from habr.models.post import Post
 from habr.models.user import User, Profile
 
@@ -51,7 +50,7 @@ def user_posts_page():
 @profile.route("/posts/<status_name>/")
 def status_filter(status_name: str):
     if status_name not in status_dic.keys():
-        raise NotFound('Нет такого статуса у статей!')
+        raise NotFound()
     postlist = Post.query\
         .filter(Post.status == status_name.upper())\
         .filter_by(user_id=current_user.id)\
@@ -75,7 +74,10 @@ def show_user_posts():
 @profile.route("/admin/<status>/")
 def moder_user_posts(status: str):
     status = 'modering'
-    postlist = Post.query.filter(Post.status == status.upper()).order_by(Post.created_at.desc()).all()
+    if current_user.is_admin or current_user.is_staff:
+        postlist = Post.query.filter(Post.status == status.upper()).order_by(Post.created_at.desc()).all()
+    else:
+        raise Forbidden()
 
     title = f'Статьи пользователя {current_user.username} на модерации'
     return render_template('index.html', title=title, postlist=postlist)
