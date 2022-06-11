@@ -8,6 +8,7 @@ from config import Config
 from habr.blueprints.posts import posts
 from habr.blueprints.profile import profile
 from habr.blueprints.auth import auth
+from habr.blueprints.errors import errors
 
 from habr.models.database import db, migrate
 from habr.models.user import User
@@ -40,6 +41,7 @@ def register_blueprints(app):
     app.register_blueprint(posts)
     app.register_blueprint(profile)
     app.register_blueprint(auth)
+    app.register_blueprint(errors)
 
 
 def register_commands(app):

@@ -105,11 +105,6 @@ def update_article(pk):
     form.status.choices = [y for y in PostStatus.__members__ if y != 'PUBLISHED' and y != 'NEED_REFACTOR']
     post = Post.query.get_or_404(pk)
 
-    # if request.method == 'GET':
-    #     if current_user != post.user:
-    #         flash("Can't update another user's post!")
-    #         return redirect(url_for('posts.concrete_post', pk=pk))
-
     if request.method == "POST" and form.validate_on_submit():
         post.header = form.title.data
         post.category = form.category.data
@@ -130,12 +125,8 @@ def update_article(pk):
 @posts.route('/post/delete/<int:pk>')
 def delete_article(pk: int):
     post = Post.query.get_or_404(pk)
-    # if request.method == 'GET':
-    #     # if current_user != post.user:
-    #     #     flash("Can't delete another user's post!")
-    #         return redirect(url_for('posts.concrete_post', pk=pk))
 
-    if post.user == current_user or current_user.is_admin == True:
+    if post.user == current_user or current_user.is_admin:
         post.status = PostStatus.ARCHIEVED
         db.session.add(post)
         db.session.commit()
@@ -145,7 +136,7 @@ def delete_article(pk: int):
 @posts.route('/post/need_ref/<int:pk>')
 def need_ref_article(pk: int):
     post = Post.query.get_or_404(pk)
-    if current_user.is_staff == True or current_user.is_admin == True:
+    if current_user.is_staff or current_user.is_admin:
         post.status = PostStatus.NEED_REFACTOR
         db.session.add(post)
         db.session.commit()
@@ -155,7 +146,7 @@ def need_ref_article(pk: int):
 @posts.route('/post/publish/<int:pk>')
 def pub_article(pk: int):
     post = Post.query.get_or_404(pk)
-    if current_user.is_staff == True or current_user.is_admin == True:
+    if current_user.is_staff or current_user.is_admin:
         post.status = PostStatus.PUBLISHED
         db.session.add(post)
         db.session.commit()
@@ -168,7 +159,7 @@ def update_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     form = UpdateCommentForm()
 
-    if comment.username == current_user.username or current_user.is_admin == True:
+    if comment.username == current_user.username or current_user.is_admin:
         if request.method == 'GET':
             form.body.data = comment.body
 
@@ -184,7 +175,7 @@ def update_comment(comment_id):
 @posts.route('/comment/<int:comment_id>/delete/')
 def delete_comment(comment_id):
     remove_comment = Comment.query.get_or_404(comment_id)
-    if remove_comment.username == current_user.username or current_user.is_admin == True:
+    if remove_comment.username == current_user.username or current_user.is_admin:
         db.session.delete(remove_comment)
         db.session.commit()
         return redirect(url_for('posts.concrete_post', pk=remove_comment.post_id))

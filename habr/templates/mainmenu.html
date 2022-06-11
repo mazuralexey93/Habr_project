@@ -19,5 +19,9 @@
             <a class="list-group-item{% if menu == 'logout' %} active{% endif %}" href="/logout/"> Logout </a>
 
         {% endif %}
+
+    {% if current_user.is_admin or current_user.is_staff%}
+        <a class="list-group-item" href="/profile/admin/modering//"> Статьи на модерации </a>
+    {% endif %}
     </nav>
 </div>
