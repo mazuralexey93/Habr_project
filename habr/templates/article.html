@@ -31,18 +31,24 @@
 
         {% endif %}
 
-     {% if  current_user.is_staff == True or current_user.is_admin == True %}
+        {% if  current_user.is_staff == True or current_user.is_admin == True %}
 
-         <div class="island">
-         <a class="btn btn-secondary" href="/post/need_ref/{{ post.id }}">Требует редактирования</a>
-            <a class="btn btn-success" href="/post/publish/{{ post.id }}">Опубликовать</a>
-{#            <a class="btn btn-info" href="/?/{{ post.id }}">Бан пользователя</a>#}
-         </div>
+            <div class="island">
+                <a class="btn btn-secondary" href="/post/need_ref/{{ post.id }}">Требует редактирования</a>
+                <a class="btn btn-success" href="/post/publish/{{ post.id }}">Опубликовать</a>
+                {#            <a class="btn btn-info" href="/?/{{ post.id }}">Бан пользователя</a>#}
+            </div>
 
-    {% endif %}
+        {% endif %}
         <div class="stat_post">
             <div class="stat_left">&#128065 {{ post.views }}</div>
-            <div class="stat_right">&#10084 {{ post.likes }}</div>
+            <div class="stat_right">
+                {% if current_user.has_liked_post(post) %}
+                    <a href="{{ url_for('posts.like_action', post_id=post.id, action='unlike') }}">&#128148 {{ post.likes }}</a>
+                {% else %}
+                    <a href="{{ url_for('posts.like_action', post_id=post.id, action='like') }}">&#10084 {{ post.likes }}</a>
+                {% endif %}
+            </div>
         </div>
 
         <div class="comment">
