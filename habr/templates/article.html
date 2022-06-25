@@ -43,11 +43,15 @@
         <div class="stat_post">
             <div class="stat_left">&#128065 {{ post.views }}</div>
             <div class="stat_right">
+            {% if current_user.is_authenticated %}
                 {% if current_user.has_liked_post(post) %}
                     <a href="{{ url_for('posts.like_action', post_id=post.id, action='unlike') }}">&#128148 {{ post.likes }}</a>
                 {% else %}
                     <a href="{{ url_for('posts.like_action', post_id=post.id, action='like') }}">&#10084 {{ post.likes }}</a>
                 {% endif %}
+             {% else %}
+            &#10084 {{ post.likes }}
+            {% endif %}
             </div>
         </div>
 
