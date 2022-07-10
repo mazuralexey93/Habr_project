@@ -35,9 +35,8 @@ class Post(db.Model):
     views = db.Column(db.Integer, default='0')
     likes = db.Column(db.Integer, default='0')
 
-
-def __repr__(self):
-    return f"<Post {self.id}, {self.header}>"
+    def __repr__(self):
+        return f"<Post {self.id}, {self.header}>"
 
 
 class Comment(db.Model):
@@ -50,5 +49,13 @@ class Comment(db.Model):
     date_posted = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), nullable=False)
 
-def __repr__(self):
-    return f"<Comment {self.body}, {self.date_posted.strftime('%d.%m.%Y-%.H%.M')}, {self.post_id}>"
+    def __repr__(self):
+        return f"<Comment {self.body}, {self.date_posted.strftime('%d.%m.%Y-%.H%.M')}, {self.post_id}>"
+
+
+class PostLike(db.Model):
+    __tablename__ = "post_like"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))

@@ -179,3 +179,18 @@ def delete_comment(comment_id):
         db.session.delete(remove_comment)
         db.session.commit()
         return redirect(url_for('posts.concrete_post', pk=remove_comment.post_id))
+
+
+@posts.route('/like/<int:post_id>/<action>')
+@login_required
+def like_action(post_id, action):
+    post = Post.query.filter_by(id=post_id).first_or_404()
+    if action == 'like':
+        current_user.like_post(post)
+        post.likes += 1
+        db.session.commit()
+    if action == 'unlike':
+        current_user.unlike_post(post)
+        post.likes -= 1
+        db.session.commit()
+    return redirect(request.referrer)

@@ -11,7 +11,7 @@ body {
 }
 a {
     color: inherit;
-    text-decoration: underline;
+    text-decoration: none;
 }
 a:hover {
     color: inherit;
@@ -113,6 +113,3 @@ main {
         margin-right: 0;
     }
 }
-
-
-
