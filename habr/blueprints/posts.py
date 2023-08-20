@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, Forbidden
 
 from habr.models.post import Post, CategoryChoices, PostStatus, Comment
 from habr.models.user import User
@@ -55,6 +55,8 @@ def author_filter(pk: int):
 @posts.route('/post/<int:pk>', methods=['GET', 'POST'])
 def concrete_post(pk: int):
     selected_post = Post.query.filter_by(id=pk).first_or_404()
+    # if selected_post.user != current_user:
+    #     raise Forbidden()
     comment = Comment.query.filter_by(post_id=pk).order_by(db.desc(Comment.date_posted)).all()
     selected_post.views += 1
     db.session.commit()
